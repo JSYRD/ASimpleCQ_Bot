@@ -1,53 +1,37 @@
-from BotCommandFunction import BotCommandFunction
-from BotOperatingFunction import BotFunction, BotOperatingFunction
 import threading
+from queue import Queue
+import requests
+from BotEvent import BotEvent
+import CONFIG
 class Bot(threading.Thread):
-    functionObjects = []                                                                #所有插件类的实例
     state = True                                                                        #Bot的state，暂时保留
-    def __init__(self, functionNames, functions):
+    eventBox = Queue(maxsize=100)
+    def __init__(self):
         super().__init__()
-        self.functionNames = functionNames
-        self.functions = functions
-        for functionObject in self.functions:
-            self.functionObjects.append(functionObject())                               #初始化插件类的实例并放入列表
-    def __DecodeCommand__(self, msg) :
-        """
-        解码Command，Command格式：
-        ```
-        commandName param0, param1, ...
-        ```
-        若非command格式返回空列表。
-        """
-        if(msg[0]=='/'):
-            return msg[1:].split(' ')
-        else:
-            return []
-    def handle(self, json):
-        """
-        Bot处理新事件，流程为：
-        ```python 
-        if(self.state == False):    
-            pass                    #Bot state，暂时保留
-        else:
-            for functionObject in self.functionObjects:
-                if functionObject.state == True:
-                    if(isinstance(functionObject, BotOperatingFunction)):
-                        functionObject.FunctionOperate(json)
-                if(isinstance(functionObject, BotCommandFunction)):                         #CLI
-                    if(json['post_type'] == 'message' and json['raw_message'][0] == '/'):
-                        functionObject.CommandOperate(self.__DecodeCommand__(json['raw_message']), json)
-        ```
-        """
-        if(self.state == False):
-            pass
-        else:
-            for functionObject in self.functionObjects:
-                if functionObject.state == True:
-                    if(isinstance(functionObject, BotOperatingFunction)):
-                        functionObject.FunctionOperate(json)
-                if(isinstance(functionObject, BotCommandFunction)):                         #CLI
-                    if(json['post_type'] == 'message' and json['raw_message'][0] == '/'):
-                        functionObject.CommandOperate(self.__DecodeCommand__(json['raw_message']), json)
+    def handle(self, event:BotEvent):
+        if(event.eventType == 'group'):
+            self.SendGroupMsg(event.id, event.raw_message)
+        elif(event.eventType == 'private'):
+            self.SendPrivateMsg(event.id, event.raw_message)
     def run(self):
         while(True):
-            pass
+            event = Bot.eventBox.get(block=True)
+            self.handle(event)
+
+
+    def SendPrivateMsg(self, privateId, privateMsg):
+        """
+        Try send `privateMsg` to `privateId`
+        """
+        try:
+            requests.get(CONFIG.serverUrl+'send_private_msg',{'user_id':privateId, 'message':privateMsg})
+        except:
+            raise
+    def SendGroupMsg(self, groupId, groupMsg):
+        """
+        Try send `groupMsg` to `groupId`
+        """
+        try:
+            requests.get(CONFIG.serverUrl+'send_group_msg',{'group_id':groupId, 'message':groupMsg})
+        except:
+            raise
