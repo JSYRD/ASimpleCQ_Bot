@@ -11,3 +11,23 @@ $ python3 main.py
 ```
 
 即可。
+
+
+
+## 添加功能
+
+只需新建python文件，声明一个类并继承Plugin类，重写抽象方法即可：
+
+```python
+from BotEvent import BotEvent
+from Plugin import Plugin
+def YourPlugin(Plugin):
+    def __init__(self):
+        super().__init__()
+    def run(self):
+        while(True):
+            #do your things
+            
+```
+
+将该文件放入`./scripts/plugins ` 中并重新运行即可。

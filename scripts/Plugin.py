@@ -23,6 +23,10 @@ class Plugin(threading.Thread,metaclass = abc.ABCMeta):
 
     @abc.abstractmethod
     def run(self):
+        """
+        `main.py`在开始运行时会自动调用一次该方法。
+        注意仅调用一次。
+        """
         pass
     def __DecodeCommand__(self, json) :
         """
