@@ -4,6 +4,7 @@ from flask import Flask, request
 import pkgutil
 from Bot import Bot
 from PluginsController import PluginsController
+import CONFIG
 
 __PluginNames__ = [name for _, name, _ in pkgutil.iter_modules(['./plugins'])]        #获取插件类的名称
 __Plugins__ = []
@@ -27,4 +28,4 @@ if(__name__ == '__main__'):
     bot = Bot()
     bot.start()
     pluginsController = PluginsController(__Plugins__)
-    app.run('127.0.0.1', debug = False, port = 5701, threaded = False)
+    app.run(CONFIG.listeningUrl, debug = False, port = CONFIG.listeningPort, threaded = False)

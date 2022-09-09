@@ -1,3 +1,5 @@
 serverUrl = 'http://127.0.0.1:5700/'
-testGroupId = '639133624'
+listeningUrl = '127.0.0.1'
+listeningPort = 5701
+
 opId = '1353097778'
