@@ -44,11 +44,11 @@ class Echo(Plugin):
                     if (self.__temp__ == event["raw_message"]):
                         self.count += 1
                     else:
-                        self.__temp__ == event["raw_message"]
+                        self.__temp__ = event["raw_message"]
                         self.count = 0
-                    if (self.count == 1):
-                        self.PutEvent2Bot(
-                            BotEvent("group", event["group_id"], self.__temp__)
-                        )
+            if (self.count == 1):
+                self.PutEvent2Bot(
+                    BotEvent("group", event["group_id"], self.__temp__)
+                )
             else:
                 self.TrySwitchState(event, "echo")
