@@ -3,12 +3,7 @@ from BotEvent import BotEvent
 from Plugin import Plugin
 from datetime import datetime
 
-SLEEP_SECONDS = 60
-
-
-class GameState(Enum):
-    preparing = "preparing"
-    gaming = "gaming"
+SLEEP_SECONDS = 10
 
 
 class Echo(Plugin):
@@ -17,7 +12,7 @@ class Echo(Plugin):
     ```python
     self.echoList = ['？','?','好好好','111']
     ```
-
+    以及自动+1
     """
 
     def __init__(self) -> None:
@@ -25,6 +20,8 @@ class Echo(Plugin):
         self.echoList = ["？", "?", "好好好", "111"]
         # self.state = True
         self.last_msg_datetime = 0
+        self.__temp__ = "114514"
+        self.count = 0
 
     def run(self):
         while True:
@@ -32,15 +29,26 @@ class Echo(Plugin):
             if (
                 self.state
                 and event["post_type"] == "message"
-                and event["raw_message"] in self.echoList
             ):
-                now_datetime = datetime.now().timestamp()
-                seconds_elapsed = now_datetime - self.last_msg_datetime
-                if seconds_elapsed < SLEEP_SECONDS:
-                    continue
-                self.last_msg_datetime = now_datetime
-                self.PutEvent2Bot(
-                    BotEvent("group", event["group_id"], event["raw_message"])
-                )
+                if (event["raw_message"] in self.echoList):
+                    now_datetime = datetime.now().timestamp()
+                    seconds_elapsed = now_datetime - self.last_msg_datetime
+                    if seconds_elapsed < SLEEP_SECONDS:
+                        continue
+                    self.last_msg_datetime = now_datetime
+                    self.PutEvent2Bot(
+                        BotEvent(
+                            "group", event["group_id"], event["raw_message"])
+                    )
+                else:
+                    if (self.__temp__ == event["raw_message"]):
+                        self.count += 1
+                    else:
+                        self.__temp__ == event["raw_message"]
+                        self.count = 0
+                    if (self.count == 1):
+                        self.PutEvent2Bot(
+                            BotEvent("group", event["group_id"], self.__temp__)
+                        )
             else:
                 self.TrySwitchState(event, "echo")

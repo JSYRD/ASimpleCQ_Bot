@@ -16,7 +16,7 @@ $ python3 main.py
 
 ## 添加功能
 
-只需新建python文件，声明一个类并继承Plugin类，重写抽象方法即可：
+只需新建python文件，声明一个类并继承Plugin类，重写抽象方法：
 
 ```python
 from BotEvent import BotEvent
