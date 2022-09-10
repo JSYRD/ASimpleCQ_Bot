@@ -37,7 +37,7 @@ class Plugin(threading.Thread,metaclass = abc.ABCMeta):
         若非command格式返回空列表。\n
         注意返回的param[0]是不带'/'的
         """
-        if json['post_type'] == 'message' and json['raw_message'][0] == '/':
+        if json['post_type'] == 'message' and len(json['raw_message'])>0 and json['raw_message'][0] == '/':
             if(json['raw_message'][0]=='/'):
                 return json['raw_message'][1:].split(' ')
         else:

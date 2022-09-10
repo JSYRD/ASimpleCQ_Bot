@@ -12,7 +12,7 @@ class Echo(Plugin):
     ```python
     self.echoList = ['？','?','好好好','111']
     ```
-    以及自动+1
+    以及除`echoList`之外自动+1
     """
 
     def __init__(self) -> None:
@@ -41,14 +41,17 @@ class Echo(Plugin):
                             "group", event["group_id"], event["raw_message"])
                     )
                 else:
-                    if (self.__temp__ == event["raw_message"]):
+                    if(event["raw_message"] == "雪豹闭嘴"):
+                        self.state = False
+                        self.PutEvent2Bot(BotEvent("group", event["group_id"], "妈妈生的"))
+                    elif (self.__temp__ == event["raw_message"]):
                         self.count += 1
                     else:
                         self.__temp__ = event["raw_message"]
                         self.count = 0
-            if (self.count == 1):
-                self.PutEvent2Bot(
-                    BotEvent("group", event["group_id"], self.__temp__)
-                )
-            else:
+                if (self.count == 1):
+                    self.PutEvent2Bot(
+                        BotEvent("group", event["group_id"], self.__temp__)
+                    )
+            elif(event["post_type"] == "message"):
                 self.TrySwitchState(event, "echo")
