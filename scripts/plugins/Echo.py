@@ -44,6 +44,9 @@ class Echo(Plugin):
                     if(event["raw_message"] == "雪豹闭嘴"):
                         self.state = False
                         self.PutEvent2Bot(BotEvent("group", event["group_id"], "妈妈生的"))
+                    if(event["raw_message"] == "芝士雪豹"):
+                        self.state = True
+                        self.PutEvent2Bot(BotEvent("group", event["group_id"], "1！5！"))
                     elif (self.__temp__ == event["raw_message"]):
                         self.count += 1
                     else:
