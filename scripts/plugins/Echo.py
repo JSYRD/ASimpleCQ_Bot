@@ -41,9 +41,9 @@ class Echo(Plugin):
                             "group", event["group_id"], event["raw_message"])
                     )
                 else:
-                    if(event["raw_message"] == "芝士雪豹"):
-                        self.state = True
-                        self.PutEvent2Bot(BotEvent("group", event["group_id"], "1！5！"))
+                    if(event["raw_message"] == "雪豹闭嘴"):
+                        self.state = False
+                        self.PutEvent2Bot(BotEvent("group", event["group_id"], "妈妈生的"))
                     elif (self.__temp__ == event["raw_message"]):
                         self.count += 1
                     else:
@@ -54,7 +54,7 @@ class Echo(Plugin):
                         BotEvent("group", event["group_id"], self.__temp__)
                     )
             elif(event["post_type"] == "message"):
-                if(event["raw_message"] == "雪豹闭嘴"):
-                        self.state = False
-                        self.PutEvent2Bot(BotEvent("group", event["group_id"], "妈妈生的"))
+                if(event["raw_message"] == "芝士雪豹"):
+                        self.state = True
+                        self.PutEvent2Bot(BotEvent("group", event["group_id"], "1！5！"))
                 self.TrySwitchState(event, "echo")
