@@ -1,4 +1,3 @@
-from enum import Enum
 from BotEvent import BotEvent
 from Plugin import Plugin
 from datetime import datetime

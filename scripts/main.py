@@ -1,5 +1,5 @@
-from re import L
-from threading import Thread
+# from re import L
+# from threading import Thread
 from flask import Flask, request
 import pkgutil
 from Bot import Bot
